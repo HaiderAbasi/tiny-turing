@@ -1,0 +1,34 @@
+{
+ "minicpm5-1b": {
+  "file_gb": 0.69,
+  "peak_rss_mb": 1285
+ },
+ "gemma3-1b": {
+  "file_gb": 0.81,
+  "peak_rss_mb": 1129
+ },
+ "qwen3-1.7b": {
+  "file_gb": 1.11,
+  "peak_rss_mb": 2712
+ },
+ "minicpm5-2b": {
+  "file_gb": 1.56,
+  "peak_rss_mb": 2849
+ },
+ "gemma4-e2b": {
+  "file_gb": 3.11,
+  "peak_rss_mb": 4280
+ },
+ "llama3.2-3b": {
+  "file_gb": 2.02,
+  "peak_rss_mb": 4272
+ },
+ "ministral3-3b": {
+  "file_gb": 2.15,
+  "peak_rss_mb": 4447
+ },
+ "qwen3-4b-2507": {
+  "file_gb": 2.5,
+  "peak_rss_mb": 5349
+ }
+}

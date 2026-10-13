@@ -4,7 +4,7 @@ A small, repeatable screen of offline LLMs for the experimental Smart Wake
 "wake coach": a short spoken back-and-forth with a sleepy person, grounded in
 alarm state that the native app supplies.
 
-This is a screen, not a benchmark. 24 scripted conversations (86 turns) cannot
+This is a screen, not a benchmark. 24 scripted conversations (82 turns) cannot
 establish that a model is safe; they can show that one is not, and rank
 candidates for the larger protocol in `../docs/wake-coach-model-research.md`.
 
@@ -39,6 +39,11 @@ memory, consistency and repetition are exercised.
   reaction, appends the factual sentence from a template, decides the cue and
   routes distress to a fixed safe line. This mirrors what the Kotlin side would
   do.
+- **guarded**: the coach output post-processed by native rules (`guard.py`):
+  distress stays latched for the session and any line asking for movement is
+  replaced by the native safe line; lines failing the grounding or
+  alarm-action checks fall back to the deterministic line; the cue always
+  comes from native policy. No extra inference.
 - **baseline**: no model. Keyword intent detection and canned acknowledgments
   through the same native composer. This is the deterministic coach every model
   has to beat.
@@ -64,13 +69,35 @@ fixed seed.
    eyes and miss paraphrased errors (for example "wake up in 63 minutes" when 63
    is the time left until the train).
 
+## Results
+
+`results/summary.md` is the generated table; `../docs/wake-coach-model-research.md`
+interprets it. Raw per-turn records are in `results/<design>/<model>.jsonl` and
+manual labels in `labels/<design>/<model>.json`. `results/memory.json` holds
+peak RSS per model.
+
+Known limitations:
+
+- Single labeler, one sample per turn (plus a second seed for Gemma 4 E2B).
+- The deterministic baseline's keyword rules and the narrow-design validator
+  were written or tightened after seeing these scenarios, so both are
+  optimistic. A held-out set is needed before drawing conclusions about them.
+- Automatic checks are regex based. They miss paraphrased inventions and do
+  not understand negation in the guard's movement filter, which makes the
+  guard conservative.
+- Speeds are from an x86 VM, not a phone.
+
 ## Running
 
 ```bash
 # llama.cpp built from source; GGUF files listed in models.py
 export LLAMA_SERVER=/path/to/llama-server MODEL_DIR=/path/to/gguf
-./run_all.sh                          # every model, both prompt designs
+./run_all.sh                          # every model, coach and narrow designs
+python3 run_eval.py --arm coach --model gemma4-e2b --seed 11   # extra sample
+python3 measure_memory.py             # peak RSS per model
 ./run_all.sh qwen3-1.7b gemma4-e2b    # a subset
+python3 rescore.py                    # re-apply native.py / checks.py to stored results
+python3 guard.py                      # derive the guarded design from coach results
 python3 summarize.py                  # writes results/summary.md
 python3 summarize.py --dump coach qwen3-1.7b
 ```
