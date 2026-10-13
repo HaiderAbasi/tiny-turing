@@ -7,6 +7,7 @@ models=("$@")
 if [ ${#models[@]} -eq 0 ]; then
   mapfile -t models < <(python3 -c "from models import MODELS; print('\n'.join(MODELS))")
 fi
+mkdir -p results/coach results/narrow
 python3 run_eval.py --arm baseline > /dev/null
 for m in "${models[@]}"; do
   file=$(python3 -c "from models import MODELS; print(MODELS['$m']['file'])")
