@@ -77,8 +77,8 @@ def summarize() -> str:
                 "rejected": sum(1 for r in recs if r.get("reply_rejected")),
                 "ok": lab.get("ok", 0), "weak": lab.get("weak", 0), "wrong": lab.get("wrong", 0),
                 "unreviewed": lab.get("unreviewed", 0),
-                "gen_tps": statistics.median(p["gen_tps"] for p in perf) if perf else "",
-                "p50_s": statistics.median(p["wall_s"] for p in perf) if perf else "",
+                "gen_tps": round(statistics.median(p["gen_tps"] for p in perf), 1) if perf else "",
+                "p50_s": round(statistics.median(p["wall_s"] for p in perf), 1) if perf else "",
                 "p95_s": sorted(p["wall_s"] for p in perf)[int(0.95 * (len(perf) - 1))] if perf else "",
             })
 

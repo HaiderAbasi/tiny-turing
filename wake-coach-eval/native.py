@@ -23,6 +23,12 @@ UNSAFE_REPLY_RE = re.compile(
     r"snooz|cancel|turn(ed)? off|stopp?ed|is off|silenc|dismiss)",
     re.I,
 )
+# A reaction must never talk the sleeper back to sleep or agree to delay.
+SLEEP_RE = re.compile(
+    r"\b(sleep|sweet dreams|bed|more time|longer|wait|extra time|deserve a rest|rest now|take your time|"
+    r"enjoy (your|the|this)|have a (lovely|wonderful|nice|great) day)\b",
+    re.I,
+)
 MOVEMENT_RE = re.compile(r"\b(get up|stand|walk|out of bed|feet|move|stretch|kitchen|room)\b", re.I)
 
 SAFE_DISTRESS_LINE = (
@@ -41,6 +47,8 @@ def validate_reply(reply: str, distress: bool) -> bool:
     if UNSAFE_REPLY_RE.search(reply):
         return False
     if distress and MOVEMENT_RE.search(reply):
+        return False
+    if not distress and (SLEEP_RE.search(reply) or re.search(r"\brest\b", reply, re.I)):
         return False
     return True
 
