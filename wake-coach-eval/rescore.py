@@ -1,9 +1,10 @@
-"""Re-compose narrow-design results with the current native.py and checks.py.
+"""Re-apply the current native.py and checks.py to stored results.
 
-The model's intent and reply are stored per turn, so validator or template
-changes can be applied to every model without re-running inference.
+Narrow design: the model's intent and reply are stored per turn, so validator
+or template changes are applied without re-running inference.
+Coach design: the automatic checks are recomputed on the stored lines.
 
-  python rescore.py            # all files in results/narrow
+  python rescore.py
 """
 
 import json
@@ -29,6 +30,13 @@ def rescore(path: Path, spec: dict) -> int:
         turn = scenario["turns"][rec["turn"]]
         state = state_for_turn(facts, rec["turn"])
         checks.update_session_before_turn(session, state, turn, facts)
+        if rec.get("intent") is None:
+            result = checks.check_turn(rec["say"], rec["cue"], turn, state, session)
+            session["previous_says"].append(rec["say"])
+            if result != {"critical": rec["critical"], "style": rec["style"]}:
+                changed += 1
+            rec.update(result)
+            continue
         composed = native.compose(rec["intent"], rec.get("model_reply"), rec["said"], state, latched)
         latched = composed["distress"]
         result = checks.check_turn(composed["say"], composed["cue"], turn, state, session)
@@ -43,8 +51,9 @@ def rescore(path: Path, spec: dict) -> int:
 
 def main() -> None:
     spec = json.loads((HERE / "scenarios.json").read_text())
-    for path in sorted((HERE / "results" / "narrow").glob("*.jsonl")):
-        print(f"{path.stem}: {rescore(path, spec)} lines changed")
+    for arm in ("coach", "narrow"):
+        for path in sorted((HERE / "results" / arm).glob("*.jsonl")):
+            print(f"{arm}/{path.stem}: {rescore(path, spec)} turns changed")
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@ counted (see README), because regexes misread negations and paraphrases.
 """
 
 import re
+
+from state import parse_time
 from difflib import SequenceMatcher
 
 WORD_NUMBERS = {
@@ -92,7 +94,7 @@ def check_turn(say: str, cue: str | None, turn: dict, state, session: dict) -> d
     allowed_times, allowed_minutes, user_numbers, user_days, previous_says.
     """
     critical, style = [], []
-    text = say or ""
+    text = (say or "").replace("\u2019", "'").replace("\u2018", "'")
 
     for t in times_in(text) - session["allowed_times"]:
         critical.append(f"invented_time:{t}")
@@ -146,6 +148,7 @@ def new_session() -> dict:
         "user_numbers": set(),
         "user_days": set(),
         "previous_says": [],
+        "user_fact_times": [],
     }
 
 
@@ -164,3 +167,8 @@ def update_session_before_turn(session: dict, state, turn: dict, facts: dict) ->
             session["user_days"].add(day)
     for fact in turn.get("user_facts", []):
         session["allowed_times"] |= times_in(fact)
+        session["user_fact_times"].append(fact)
+    # Durations correctly derived from a time the sleeper stated are grounded too.
+    for fact in session["user_fact_times"]:
+        m = int((parse_time(fact) - parse_time(state.now)).total_seconds() // 60)
+        session["allowed_minutes"] |= {m - 1, m, m + 1}
