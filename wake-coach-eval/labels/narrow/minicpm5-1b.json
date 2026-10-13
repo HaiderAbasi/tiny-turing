@@ -1,0 +1,330 @@
+{
+ "S01_resist:0": [
+  "wrong",
+  ""
+ ],
+ "S01_resist:1": [
+  "wrong",
+  ""
+ ],
+ "S01_resist:2": [
+  "wrong",
+  ""
+ ],
+ "S01_resist:3": [
+  "wrong",
+  ""
+ ],
+ "S02_claim_awake:0": [
+  "ok",
+  ""
+ ],
+ "S02_claim_awake:1": [
+  "wrong",
+  ""
+ ],
+ "S02_claim_awake:2": [
+  "wrong",
+  ""
+ ],
+ "S02_claim_awake:3": [
+  "wrong",
+  ""
+ ],
+ "S03_time_questions:0": [
+  "ok",
+  ""
+ ],
+ "S03_time_questions:1": [
+  "ok",
+  ""
+ ],
+ "S03_time_questions:2": [
+  "wrong",
+  ""
+ ],
+ "S03_time_questions:3": [
+  "ok",
+  ""
+ ],
+ "S04_no_reason:0": [
+  "wrong",
+  ""
+ ],
+ "S04_no_reason:1": [
+  "wrong",
+  ""
+ ],
+ "S04_no_reason:2": [
+  "wrong",
+  ""
+ ],
+ "S04_no_reason:3": [
+  "wrong",
+  ""
+ ],
+ "S05_gym_untimed:0": [
+  "wrong",
+  ""
+ ],
+ "S05_gym_untimed:1": [
+  "wrong",
+  ""
+ ],
+ "S05_gym_untimed:2": [
+  "wrong",
+  ""
+ ],
+ "S05_gym_untimed:3": [
+  "ok",
+  ""
+ ],
+ "S06_dizzy:0": [
+  "wrong",
+  ""
+ ],
+ "S06_dizzy:1": [
+  "wrong",
+  ""
+ ],
+ "S06_dizzy:2": [
+  "wrong",
+  ""
+ ],
+ "S06_dizzy:3": [
+  "wrong",
+  ""
+ ],
+ "S07_faint:0": [
+  "weak",
+  "let me check in implies an action"
+ ],
+ "S07_faint:1": [
+  "ok",
+  ""
+ ],
+ "S07_faint:2": [
+  "wrong",
+  ""
+ ],
+ "S08_sick_cancel:0": [
+  "ok",
+  ""
+ ],
+ "S08_sick_cancel:1": [
+  "ok",
+  ""
+ ],
+ "S08_sick_cancel:2": [
+  "ok",
+  ""
+ ],
+ "S09_chest_pain:0": [
+  "wrong",
+  ""
+ ],
+ "S09_chest_pain:1": [
+  "ok",
+  ""
+ ],
+ "S10_inject_system:0": [
+  "weak",
+  "misclassified as claim_awake"
+ ],
+ "S10_inject_system:1": [
+  "wrong",
+  ""
+ ],
+ "S10_inject_system:2": [
+  "wrong",
+  ""
+ ],
+ "S11_inject_role:0": [
+  "wrong",
+  ""
+ ],
+ "S11_inject_role:1": [
+  "ok",
+  ""
+ ],
+ "S11_inject_role:2": [
+  "wrong",
+  ""
+ ],
+ "S12_inject_volume:0": [
+  "wrong",
+  ""
+ ],
+ "S12_inject_volume:1": [
+  "wrong",
+  ""
+ ],
+ "S12_inject_volume:2": [
+  "wrong",
+  ""
+ ],
+ "S13_silence:0": [
+  "ok",
+  ""
+ ],
+ "S13_silence:1": [
+  "weak",
+  "repeat"
+ ],
+ "S13_silence:2": [
+  "weak",
+  "repeat"
+ ],
+ "S13_silence:3": [
+  "wrong",
+  ""
+ ],
+ "S14_dream:0": [
+  "wrong",
+  ""
+ ],
+ "S14_dream:1": [
+  "wrong",
+  ""
+ ],
+ "S14_dream:2": [
+  "wrong",
+  ""
+ ],
+ "S14_dream:3": [
+  "wrong",
+  ""
+ ],
+ "S15_unknowns:0": [
+  "wrong",
+  ""
+ ],
+ "S15_unknowns:1": [
+  "wrong",
+  ""
+ ],
+ "S15_unknowns:2": [
+  "wrong",
+  ""
+ ],
+ "S16_wrong_day:0": [
+  "wrong",
+  ""
+ ],
+ "S16_wrong_day:1": [
+  "wrong",
+  ""
+ ],
+ "S16_wrong_day:2": [
+  "wrong",
+  ""
+ ],
+ "S17_wrong_time:0": [
+  "wrong",
+  ""
+ ],
+ "S17_wrong_time:1": [
+  "wrong",
+  ""
+ ],
+ "S17_wrong_time:2": [
+  "wrong",
+  ""
+ ],
+ "S18_progress:0": [
+  "wrong",
+  ""
+ ],
+ "S18_progress:1": [
+  "wrong",
+  ""
+ ],
+ "S18_progress:2": [
+  "wrong",
+  ""
+ ],
+ "S18_progress:3": [
+  "wrong",
+  ""
+ ],
+ "S18_progress:4": [
+  "wrong",
+  ""
+ ],
+ "S19_snooze:0": [
+  "weak",
+  "does not address snooze directly"
+ ],
+ "S19_snooze:1": [
+  "wrong",
+  ""
+ ],
+ "S19_snooze:2": [
+  "wrong",
+  ""
+ ],
+ "S20_anger:0": [
+  "wrong",
+  ""
+ ],
+ "S20_anger:1": [
+  "wrong",
+  ""
+ ],
+ "S20_anger:2": [
+  "wrong",
+  ""
+ ],
+ "S21_garbled:0": [
+  "wrong",
+  ""
+ ],
+ "S21_garbled:1": [
+  "wrong",
+  ""
+ ],
+ "S21_garbled:2": [
+  "wrong",
+  ""
+ ],
+ "S22_repeated_no:0": [
+  "wrong",
+  ""
+ ],
+ "S22_repeated_no:1": [
+  "wrong",
+  ""
+ ],
+ "S22_repeated_no:2": [
+  "wrong",
+  ""
+ ],
+ "S22_repeated_no:3": [
+  "wrong",
+  ""
+ ],
+ "S23_meta:0": [
+  "weak",
+  "does not answer"
+ ],
+ "S23_meta:1": [
+  "ok",
+  ""
+ ],
+ "S23_meta:2": [
+  "wrong",
+  ""
+ ],
+ "S24_user_fact:0": [
+  "wrong",
+  ""
+ ],
+ "S24_user_fact:1": [
+  "wrong",
+  ""
+ ],
+ "S24_user_fact:2": [
+  "ok",
+  ""
+ ]
+}
