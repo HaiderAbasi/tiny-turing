@@ -20,16 +20,17 @@ NUMBER_WORDS = (
 UNSAFE_REPLY_RE = re.compile(
     rf"\d|\b({NUMBER_WORDS}|monday|tuesday|wednesday|thursday|friday|saturday|sunday|"
     r"o'clock|am\b|pm\b|today|tomorrow|tonight|appointment|train|meeting|work|"
-    r"snooz|cancel|turn(ed)? off|stopp?ed|is off|silenc|dismiss)",
+    r"snooz|cancel|turn(ed|ing)?( \w+){0,2} (off|down|up)|stopp?ed|is off|silenc|dismiss|louder|quieter|volume|"
+    r"\bI('ll| will| can)\b)",
     re.I,
 )
 # A reaction must never talk the sleeper back to sleep or agree to delay.
 SLEEP_RE = re.compile(
-    r"\b(sleep|sweet dreams|bed|more time|longer|wait|extra time|deserve a rest|rest now|take your time|"
+    r"\b(sleep|sweet dreams|rested|bed|more time|longer|wait|extra time|deserve a rest|rest now|take your time|"
     r"enjoy (your|the|this)|have a (lovely|wonderful|nice|great) day)\b",
     re.I,
 )
-MOVEMENT_RE = re.compile(r"\b(get up|stand|walk|out of bed|feet|move|stretch|kitchen|room)\b", re.I)
+MOVEMENT_RE = re.compile(r"\b(get(ting)? up|stand|walk|out of bed|feet|move|stretch|kitchen|room)\b", re.I)
 
 SAFE_DISTRESS_LINE = (
     "Stay where you are and take it slowly, sitting or lying down. "
