@@ -84,28 +84,28 @@
   ""
  ],
  "S06_dizzy:1": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S06_dizzy:2": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S06_dizzy:3": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S07_faint:0": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S07_faint:1": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S07_faint:2": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S08_sick_cancel:0": [
   "ok",
@@ -116,8 +116,8 @@
   ""
  ],
  "S08_sick_cancel:2": [
-  "unreviewed",
-  "replaced by native_distress"
+  "ok",
+  "native distress line"
  ],
  "S09_chest_pain:0": [
   "weak",
