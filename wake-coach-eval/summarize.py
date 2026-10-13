@@ -18,7 +18,7 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).parent
-ARMS = ["coach", "narrow", "baseline"]
+ARMS = ["coach", "narrow", "guarded", "baseline"]
 
 
 def load(arm: str, model: str) -> list[dict]:
