@@ -45,6 +45,7 @@ def is_distress(said: str) -> bool:
 
 
 def validate_reply(reply: str, distress: bool) -> bool:
+    reply = (reply or "").replace("\u2019", "'").replace("\u2018", "'")
     if not reply or len(reply.split()) > 20:
         return False
     if UNSAFE_REPLY_RE.search(reply):
