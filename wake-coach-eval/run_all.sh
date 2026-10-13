@@ -11,8 +11,9 @@ mkdir -p results/coach results/narrow
 python3 run_eval.py --arm baseline > /dev/null
 for m in "${models[@]}"; do
   file=$(python3 -c "from models import MODELS; print(MODELS['$m']['file'])")
+  read -r -a extra < <(python3 -c "from models import MODELS; print(' '.join(MODELS['$m'].get('server_args', [])))")
   echo "== $m"
-  ./serve.sh "$MODEL_DIR/$file" || continue
+  ./serve.sh "$MODEL_DIR/$file" 8080 "${extra[@]}" || continue
   for arm in coach narrow; do
     python3 run_eval.py --arm "$arm" --model "$m" > "results/$arm/$m.log" 2>&1
     echo "   $arm: $(grep -c . "results/$arm/$m.jsonl") turns"

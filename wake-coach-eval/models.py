@@ -2,6 +2,9 @@
 
 Thinking is disabled for every hybrid model: replies must be immediate and
 short, and earlier screens showed thinking mode exhausting the token budget.
+Gemma 4 E2B ignores enable_thinking=false with its GGUF chat template and still
+opens a thought channel, so its server also gets --reasoning-budget 0, which
+closes the channel immediately.
 """
 
 NO_THINK = {"enable_thinking": False}
@@ -35,6 +38,7 @@ MODELS = {
         "repo": "unsloth/gemma-4-E2B-it-GGUF",
         "sampling": {"temperature": 1.0, "top_k": 64, "top_p": 0.95},
         "template_kwargs": NO_THINK,
+        "server_args": ["--reasoning-budget", "0"],
     },
     "llama3.2-3b": {
         "file": "Llama-3.2-3B-Instruct-Q4_K_M.gguf",
