@@ -24,11 +24,11 @@ from state import state_for_turn
 HERE = Path(__file__).parent
 
 
-def chat(url: str, messages: list, schema: dict, sampling: dict, template_kwargs: dict) -> tuple[str, dict]:
+def chat(url: str, messages: list, schema: dict, sampling: dict, template_kwargs: dict, seed: int) -> tuple[str, dict]:
     body = {
         "messages": messages,
         "max_tokens": 160,
-        "seed": 7,
+        "seed": seed,
         "response_format": {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema}},
         **sampling,
     }
@@ -62,7 +62,7 @@ def parse(content: str) -> dict | None:
         return None
 
 
-def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: dict | None) -> list[dict]:
+def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: dict | None, seed: int = 7) -> list[dict]:
     system = prompts.COACH_SYSTEM if arm == "coach" else prompts.NARROW_SYSTEM
     messages = [{"role": "system", "content": system}]
     session = checks.new_session()
@@ -87,7 +87,7 @@ def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: di
                 user = prompts.narrow_user_message(said)
                 schema = prompts.NARROW_SCHEMA
             messages.append({"role": "user", "content": user})
-            raw, perf = chat(url, messages, schema, cfg["sampling"], cfg.get("template_kwargs", {}))
+            raw, perf = chat(url, messages, schema, cfg["sampling"], cfg.get("template_kwargs", {}), seed)
             messages.append({"role": "assistant", "content": raw})
             obj = parse(raw) or {}
             if arm == "coach":
@@ -119,6 +119,7 @@ def main() -> None:
     ap.add_argument("--model", default="baseline")
     ap.add_argument("--url", default="http://127.0.0.1:8080")
     ap.add_argument("--only", help="comma-separated scenario ids")
+    ap.add_argument("--seed", type=int, default=7)
     args = ap.parse_args()
 
     spec = json.loads((HERE / "scenarios.json").read_text())
@@ -127,13 +128,14 @@ def main() -> None:
 
     out_dir = HERE / "results" / args.arm
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"{args.model}.jsonl"
+    suffix = "" if args.seed == 7 else f"-seed{args.seed}"
+    out_path = out_dir / f"{args.model}{suffix}.jsonl"
     with out_path.open("w") as fh:
         for scenario in spec["scenarios"]:
             if wanted and scenario["id"] not in wanted:
                 continue
             facts = spec["fact_sets"][scenario["facts"]]
-            for rec in run_scenario(scenario, facts, args.arm, args.url, cfg):
+            for rec in run_scenario(scenario, facts, args.arm, args.url, cfg, args.seed):
                 fh.write(json.dumps(rec) + "\n")
                 fh.flush()
                 flag = " ".join(rec["critical"]) or "-"
