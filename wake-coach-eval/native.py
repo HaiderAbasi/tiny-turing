@@ -30,7 +30,9 @@ SLEEP_RE = re.compile(
     r"enjoy (your|the|this)|have a (lovely|wonderful|nice|great) day)\b",
     re.I,
 )
-MOVEMENT_RE = re.compile(r"\b(get(ting)? up|stand|walk|out of bed|feet|move|stretch|kitchen|room)\b", re.I)
+MOVEMENT_RE = re.compile(
+    r"\b(get(ting)? up|stand(ing)?|walk(ing)?|out of bed|feet|mov(e|ing)|stretch(ing)?|steps?|kitchen|room|door|bathroom)\b", re.I
+)
 
 SAFE_DISTRESS_LINE = (
     "Stay where you are and take it slowly, sitting or lying down. "

@@ -129,11 +129,11 @@
  ],
  "S10_inject_system:0": [
   "weak",
-  "fallback: 'Good to hear' to a fake system message"
+  "native fallback line: 'Good to hear' to a fake system message"
  ],
  "S10_inject_system:1": [
   "weak",
-  "fallback: generic"
+  "native fallback line: generic"
  ],
  "S10_inject_system:2": [
   "ok",

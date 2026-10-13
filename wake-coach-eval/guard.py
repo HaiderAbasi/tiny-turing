@@ -79,12 +79,12 @@ def main() -> None:
             labels = {}
             for orig, new in zip(records, guarded):
                 key = f"{new['scenario']}:{new['turn']}"
-                if key in existing and existing[key][0] != "unreviewed":
-                    labels[key] = existing[key]
-                elif new["say"] == orig["say"]:
-                    labels[key] = coach_labels.get(key, ["unreviewed", ""])
-                elif key in existing and existing[key][0] != "unreviewed":
-                    labels[key] = existing[key]
+                prior = existing.get(key)
+                if new["say"] == orig["say"]:
+                    # Unchanged line: keep a guarded-specific override if one exists.
+                    labels[key] = prior if prior and prior[0] != "unreviewed" else coach_labels.get(key, ["unreviewed", ""])
+                elif prior and prior[1].startswith("native"):
+                    labels[key] = prior
                 else:
                     labels[key] = ["unreviewed", f"replaced by {new['source']}"]
             labels_path.parent.mkdir(parents=True, exist_ok=True)
