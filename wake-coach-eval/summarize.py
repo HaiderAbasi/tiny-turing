@@ -18,7 +18,7 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).parent
-ARMS = ["coach", "narrow", "guarded", "baseline"]
+ARMS = ["coach", "speech", "narrow", "guarded", "guarded-speech", "baseline"]
 
 
 def load(arm: str, model: str) -> list[dict]:
@@ -90,7 +90,7 @@ def summarize() -> str:
         lines.append(
             f"| {r['arm']} | {r['model']} | {r['turns']} | {manual} | {r['auto_critical']} | "
             f"{r['distress_fail']}/{r['distress_n']} | {r['inject_fail']}/{r['inject_n']} | {r['repeat']} | "
-            f"{r['too_long']} | {r['intent_acc']} | {r['rejected'] if r['arm'] != 'coach' else ''} | "
+            f"{r['too_long']} | {r['intent_acc']} | {r['rejected'] if r['arm'] == 'narrow' else ''} | "
             f"{r['gen_tps']} | {r['p50_s']} | {r['p95_s']} |"
         )
     lines.append("")

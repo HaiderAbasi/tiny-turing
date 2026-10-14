@@ -8,8 +8,8 @@ For each coach turn:
   replaced by the deterministic baseline line for that turn;
 - the cue always comes from native policy, never from the model.
 
-No inference is needed: this re-uses results/coach/*.jsonl and writes
-results/guarded/*.jsonl. Manual labels are inherited from the coach labels
+No inference is needed: this re-uses results/coach/*.jsonl and
+results/speech/*.jsonl and writes results/guarded/ and results/guarded-speech/. Manual labels are inherited from the coach labels
 for turns whose spoken line did not change; changed turns are labeled
 separately.
 
@@ -64,15 +64,20 @@ def guard(records: list[dict], spec: dict) -> list[dict]:
 
 def main() -> None:
     spec = json.loads((HERE / "scenarios.json").read_text())
-    out_dir = HERE / "results" / "guarded"
+    for source, target in (("coach", "guarded"), ("speech", "guarded-speech")):
+        guard_arm(spec, source, target)
+
+
+def guard_arm(spec: dict, source: str, target: str) -> None:
+    out_dir = HERE / "results" / target
     out_dir.mkdir(parents=True, exist_ok=True)
-    for path in sorted((HERE / "results" / "coach").glob("*.jsonl")):
+    for path in sorted((HERE / "results" / source).glob("*.jsonl")):
         records = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
         guarded = guard(records, spec)
         (out_dir / path.name).write_text("".join(json.dumps(r) + "\n" for r in guarded))
 
-        coach_labels_path = HERE / "labels" / "coach" / f"{path.stem}.json"
-        labels_path = HERE / "labels" / "guarded" / f"{path.stem}.json"
+        coach_labels_path = HERE / "labels" / source / f"{path.stem}.json"
+        labels_path = HERE / "labels" / target / f"{path.stem}.json"
         if coach_labels_path.exists():
             coach_labels = json.loads(coach_labels_path.read_text())
             existing = json.loads(labels_path.read_text()) if labels_path.exists() else {}
@@ -90,7 +95,7 @@ def main() -> None:
             labels_path.parent.mkdir(parents=True, exist_ok=True)
             labels_path.write_text(json.dumps(labels, indent=1) + "\n")
         replaced = sum(1 for o, n in zip(records, guarded) if o["say"] != n["say"])
-        print(f"{path.stem}: {replaced} of {len(guarded)} lines replaced")
+        print(f"{target}/{path.stem}: {replaced} of {len(guarded)} lines replaced")
 
 
 if __name__ == "__main__":

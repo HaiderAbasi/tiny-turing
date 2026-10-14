@@ -51,7 +51,7 @@ def rescore(path: Path, spec: dict) -> int:
 
 def main() -> None:
     spec = json.loads((HERE / "scenarios.json").read_text())
-    for arm in ("coach", "narrow"):
+    for arm in ("coach", "speech", "narrow"):
         for path in sorted((HERE / "results" / arm).glob("*.jsonl")):
             print(f"{arm}/{path.stem}: {rescore(path, spec)} turns changed")
 

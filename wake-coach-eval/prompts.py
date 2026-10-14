@@ -21,6 +21,13 @@ Rules:
 
 Answer with JSON only: {"say": "<what to speak>", "cue": "softer" | "same" | "louder"}. Use "louder" only when they are ignoring you or drifting back to sleep and ALARM STATE says louder is allowed."""
 
+# Same rules, plain-text output: only the words to speak. The cue is decided
+# natively in the guarded design, so the model does not need to propose one,
+# and dropping the JSON wrapper roughly halves the generated tokens.
+SPEECH_SYSTEM = COACH_SYSTEM.split("\n\nAnswer with JSON only")[0].replace(
+    " Use cue \"softer\".", ""
+) + "\n\nAnswer with only the words to speak, nothing else."
+
 COACH_SCHEMA = {
     "type": "object",
     "properties": {

@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 wake-coach-eval/results/**/*.log
 wake-coach-eval/results/*.log
+wake-coach-eval/results/speech/

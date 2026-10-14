@@ -29,9 +29,12 @@ def chat(url: str, messages: list, schema: dict, sampling: dict, template_kwargs
         "messages": messages,
         "max_tokens": 160,
         "seed": seed,
-        "response_format": {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema}},
         **sampling,
     }
+    if schema is not None:
+        body["response_format"] = {"type": "json_schema", "json_schema": {"name": "reply", "schema": schema}}
+    else:
+        body["max_tokens"] = 60
     if template_kwargs:
         body["chat_template_kwargs"] = template_kwargs
     req = urllib.request.Request(
@@ -63,7 +66,7 @@ def parse(content: str) -> dict | None:
 
 
 def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: dict | None, seed: int = 7) -> list[dict]:
-    system = prompts.COACH_SYSTEM if arm == "coach" else prompts.NARROW_SYSTEM
+    system = {"coach": prompts.COACH_SYSTEM, "speech": prompts.SPEECH_SYSTEM}.get(arm, prompts.NARROW_SYSTEM)
     messages = [{"role": "system", "content": system}]
     session = checks.new_session()
     distress_latched = False
@@ -80,9 +83,9 @@ def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: di
             say, cue, intent, raw, perf = out["say"], out["cue"], out["intent"], None, {}
             distress_latched = out["distress"]
         else:
-            if arm == "coach":
+            if arm in ("coach", "speech"):
                 user = prompts.coach_user_message(state, said)
-                schema = prompts.COACH_SCHEMA
+                schema = prompts.COACH_SCHEMA if arm == "coach" else None
             else:
                 user = prompts.narrow_user_message(said)
                 schema = prompts.NARROW_SCHEMA
@@ -90,7 +93,10 @@ def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: di
             raw, perf = chat(url, messages, schema, cfg["sampling"], cfg.get("template_kwargs", {}), seed)
             messages.append({"role": "assistant", "content": raw})
             obj = parse(raw) or {}
-            if arm == "coach":
+            if arm == "speech":
+                say, cue, intent = raw.strip().strip('"'), None, None
+                obj = {"say": say}
+            elif arm == "coach":
                 say, cue, intent = obj.get("say", ""), obj.get("cue"), None
             else:
                 intent = obj.get("intent", "other")
@@ -115,7 +121,7 @@ def run_scenario(scenario: dict, facts: dict, arm: str, url: str | None, cfg: di
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--arm", choices=["coach", "narrow", "baseline"], required=True)
+    ap.add_argument("--arm", choices=["coach", "speech", "narrow", "baseline"], required=True)
     ap.add_argument("--model", default="baseline")
     ap.add_argument("--url", default="http://127.0.0.1:8080")
     ap.add_argument("--only", help="comma-separated scenario ids")
