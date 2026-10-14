@@ -379,4 +379,25 @@ Answer with only the words to speak, nothing else.
 
 ## 9. Desktop result for the plain-text variant
 
-Pending: the plain-text variant is being screened on the desktop harness.
+Same 82 turns, Gemma 4 E2B Q4_K_M GGUF, llama.cpp on the 4-core VM
+(`wake-coach-eval/results/summary.md`, designs `speech` and `guarded-speech`):
+
+| Output format | OK / weak / wrong | Guarded OK / weak / wrong | Generated tokens per reply (median, max) | Spoken words (median) | Turn time on VM (median) |
+|---|---|---|---|---|---|
+| JSON `{"say", "cue"}` | 48 / 30 / 4 | 51 / 31 / 0 | 38, 51 | 13 | 6.0 s |
+| Plain text | 45 / 35 / 2 | 47 / 35 / 0 | 19, 27 | 13 | 3.5 s |
+
+- **Same behavior, half the tokens.** Plain text keeps the grounding and
+  injection resistance, and the guard still leaves zero wrong turns.
+- **Same remaining failure:** two turns after "I think I'm going to faint"
+  it still tells the person to get up and walk. The distress latch replaces
+  those lines.
+- **Phone budget at the Phase A pass line** (8 tok/s decode, 100 tok/s
+  prefill):
+  - full reply: 19 tokens ≈ 2.4 s of decode, plus ~1.5 s prefill for a
+    ~150-token turn;
+  - first sentence, with streaming: ~10 tokens ≈ 1.3 s;
+  - so first audio lands in about 3 s, before TTS start-up.
+
+  Trimming the ALARM STATE block to the fields that changed since the last
+  turn is the next lever if prefill dominates.

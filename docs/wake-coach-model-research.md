@@ -233,29 +233,32 @@ Nothing here was measured on the phone. These figures are anchors and
 estimates:
 
 - **Anchor:** Qwen3 1.7B Q4_K_M decodes at about 10 tok/s on the Pixel 7a
-  with llama.cpp (measured separately, isolated benchmark). On the test VM it decoded at 13.5 tok/s.
-- **Scaled estimates** [Estimate] using that ratio:
+  with llama.cpp (measured separately, isolated benchmark). On the test VM it
+  decoded at 13.5 tok/s.
+- **Scaled estimates** [Estimate] using that ratio: Gemma 4 E2B about
+  7 tok/s, MiniCPM5-2B about 8 tok/s, Ministral 3 3B about 5.5 tok/s.
+- **Tokens are not words.** A token is roughly three quarters of a word, and
+  the measured replies were short [Measured]:
+  - with JSON output, Gemma 4 generated a median of 38 tokens per turn for
+    13 spoken words, because about half the tokens were the
+    `{"say": …, "cue": …}` wrapper;
+  - with plain-text output (design `speech`), the median was 19 tokens, with
+    the same behavior: 47 / 35 / 0 under the guard.
 
-  | Model | Estimated decode on Pixel 7a | Time for a 40-token reply |
-  |---|---|---|
-  | Gemma 4 E2B | ~7 tok/s | ~6 s |
-  | MiniCPM5-2B | ~8 tok/s | ~5 s |
-  | Ministral 3 3B | ~5.5 tok/s | ~7 s |
-
-  Each figure is decode time only, before prefill and TTS.
-- **What that means:** a natural exchange needs the first audio within about
-  2–3 s of the end of speech. That requires:
-  - streaming the `say` field, then validating and speaking sentence by
-    sentence;
-  - capping replies at around 25 tokens;
-  - reusing the KV cache across turns so only the new turn is prefilled;
-  - preferably a faster backend. LiteRT-LM publishes about 47 tok/s on CPU
-    and about 52 tok/s on GPU for Gemma 4 E2B on a Galaxy S26 Ultra
-    [Published, [LiteRT-LM model card](https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm)].
-    There is no Tensor G2 figure.
+  At about 7 tok/s that is roughly 2.7 s of decode for a whole plain-text
+  reply, and about 1.4 s for the first sentence when streamed to TTS.
+  Prefill comes on top: about 135–140 new prompt tokens per turn. Pixel 7a
+  prefill speed is unknown; the VM ran 59 tok/s for Gemma 4 under llama.cpp.
+- **Faster backend:** LiteRT-LM publishes 557 tok/s prefill and 47 tok/s
+  decode on CPU for Gemma 4 E2B on a Galaxy S26 Ultra
+  [Published, [LiteRT-LM model card](https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm)].
+  There is no Tensor G2 figure.
 - **Memory:** the Pixel 7a has 8 GB RAM. A 4.3 GB llama.cpp process for
-  Gemma 4 E2B is too large to run next to an alarm. The trial should use the
-  `.litertlm` build, with its memory-mapped embeddings, and a 2K context.
+  Gemma 4 E2B is too large to run next to an alarm. The trial uses the
+  `.litertlm` build, whose memory-mapped embeddings give about 1.4–1.7 GB
+  working memory on CPU in Google's tables, with a 2K context.
+
+The full on-device plan is in `gemma4-e2b-pixel7a-trial.md`.
 
 ## 6. Ranked candidates
 
