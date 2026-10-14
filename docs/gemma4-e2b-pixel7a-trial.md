@@ -3,6 +3,8 @@
 Status: plan. Experimental, opt-in, debug builds only. The V1 alarm must keep
 working with this feature absent, disabled or failing.
 
+For a one-hour go/no-go check before any of this, see `gemma4-e2b-pixel7a-quickcheck.md`.
+
 This trial answers one question: can Gemma 4 E2B, running fully offline on a
 Pixel 7a and guarded by native code, give a better wake conversation than the
 deterministic coach, fast enough and safely enough to ship? The desktop
